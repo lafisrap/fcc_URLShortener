@@ -8,7 +8,8 @@
     "async": "~0.2.8",
     "express": "^3.2.6",
     "socket.io": "~0.9.14",
-    "useragent": "^2.1.13"
+    "useragent": "^2.1.13",
+    "valid-url": "^1.0.9"
   },
   "scripts": {
     "start": "node server.js"

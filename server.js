@@ -1,19 +1,36 @@
 var express = require("express"),
-    useragent = require("useragent");
+    url = require("url"),
+	validUrl = require('valid-url');
 
 var app = express();
 
-app.get( "*", function(req, res) {
-	var h = req.headers,
-		userAgent = h["user-agent"].match(/\(([^\)]*)\)/)[0],
-		language = h["accept-language"];
-	console.log(req.headers);
+var urls = {},
+	next = 1001;
 
-    res.json({
-		software: userAgent.substr(1,userAgent.length-2),
-		language: language.substr(0, language.search(",")),
-		ipAddress: h["x-forwarded-for"]
-	});
+function insertUrl(newUrl) {
+	var short = "https://url-shortener-lafisrap.c9users.io/"+next;
+	urls[next++] = newUrl;
+	return short;
+}
+
+app.get( "/new/*", function(req, res) {
+	var path = url.parse(req.url, true, true).path,
+		newUrl = path.match(/new\/([\w\W]+)$/);
+
+	if( newUrl && validUrl.isUri(newUrl[1]) ) {
+		var inserted = insertUrl(newUrl[1]);
+
+		res.json({targetUri: newUrl[1], shortUri: inserted});	
+	} else {
+		res.json({error: "No valid URI specified."});
+	}
+});
+
+app.get( "/*", function(req, res) {
+	var path = url.parse(req.url, true).path.substr( 1 );
+
+	if( urls[path] ) res.redirect(urls[path]);
+	else res.json({error: "No valid short Uri found."});
 });
 
 app.listen(8080, function() {
