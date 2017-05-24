@@ -8,7 +8,7 @@ var urls = {},
 	next = 1001;
 
 function insertUrl(newUrl) {
-	var short = "https://url-shortener-lafisrap.c9users.io/"+next;
+	var short = "https://gentle-ravine-20116.herokuapp.com/"+next;
 	urls[next++] = newUrl;
 	return short;
 }
