@@ -13,6 +13,13 @@ function insertUrl(newUrl) {
 	return short;
 }
 
+app.use(function(req, res, next) {
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get( "/new/*", function(req, res) {
 	var path = url.parse(req.url, true, true).path,
 		newUrl = path.match(/new\/([\w\W]+)$/);
