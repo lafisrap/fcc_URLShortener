@@ -1,6 +1,6 @@
 var express = require("express"),
     url = require("url"),
-	validUrl = require('valid-url');
+		validUrl = require('valid-url');
 
 var app = express();
 
@@ -12,6 +12,8 @@ function insertUrl(newUrl) {
 	urls[next++] = newUrl;
 	return short;
 }
+
+app.set('port', (process.env.PORT || 5000));
 
 app.use(function(req, res, next) {
 
@@ -40,6 +42,6 @@ app.get( "/*", function(req, res) {
 	else res.json({error: "No valid short Uri found."});
 });
 
-app.listen(8080, function() {
-    console.log("App is listening to port 8080");
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
